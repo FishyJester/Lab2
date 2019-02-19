@@ -134,9 +134,9 @@ void *newton(void *compArg){
   free(compArg);
   double re0, im0, dInv, trueRe[d], trueIm[d];
   dInv = 1.0/d;
-  //printf("%f\n", dInv);
+ 
   calcTrueRoots(trueRe, trueIm, dInv); 
-  //printf("%f %f %f %f %f %f\n", trueRe[0], trueIm[0], trueRe[1], trueIm[1], trueRe[2], trueIm[2]);
+  
   
   for(row_index; row_index < dim; row_index+=cores){
     int *attractor = malloc(sizeof *attractor * dim);
@@ -212,7 +212,6 @@ void *writeFunction(void *writeArg){
   sprintf(attrHeaderBuff, "P3\n%ld %ld\n255\n", dim, dim);
   fwrite(&attrHeaderBuff, 1, strlen(attrHeaderBuff), attrFile);
   
-  //printf("Headers written\n");
 
   for(size_t k = 0; k < dim;){
     pthread_mutex_lock(&row_done_mutex);
@@ -270,11 +269,8 @@ void calcNextZ(double *re, double *im, const double dInv){
   rotationFunc(re, im, &reStar, &imStar);
 
   double rInv = 1.0/(reStar*reStar + imStar*imStar);
-  //printf("rInv is: %f\n", rInv);
   *re = *re - dInv * *re + dInv * reStar * rInv;
-  //printf("re in Z: %f\n", *re);
   *im = *im - dInv * *im - dInv * imStar * rInv;
-  //printf("im in Z: %f\n", *im);
 }
 
 void rotationFunc(const double *re, const double *im, double *reStar, double *imStar){
